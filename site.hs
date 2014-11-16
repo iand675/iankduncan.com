@@ -6,7 +6,7 @@ import           Hakyll
 
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyll $ do
+main = hakyllWith (defaultConfiguration { deployCommand = "rm -rf iand675.github.io/* && cp -R _site/* iand675.github.io" }) $ do
     match "CNAME" $ do
         route   idRoute
         compile copyFileCompiler
@@ -19,7 +19,11 @@ main = hakyll $ do
         route   idRoute
         compile compressCssCompiler
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
+    match "fonts/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
+    match (fromList ["about.md", "contact.markdown"]) $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" defaultContext

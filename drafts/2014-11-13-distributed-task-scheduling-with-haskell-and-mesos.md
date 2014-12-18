@@ -12,14 +12,31 @@ Mesos initially started off as a research project at Stanford before the researc
 All that said, after finding the general concept to be compelling and the code to be heavily used in production at a huge company, I decided that I simply had to have a way to play with it in the ecosystem of my choice: Haskell. So, over the course of several weekends, I wrote some bindings for it which are available on [Hackage](http://hackage.haskell.org/package/hs-mesos).
 
 ## Concepts
+
+### Mesos Masters
+
+### Mesos Slaves
+
+### Resource Offers
+
+### Tasks
+
+### The Scheduler
+
+### The Executor
+
 ## Let's Build Something!
+
+**Up-front disclaimer:** You'd probably want to use something like ZooKeeper to actually manage scheduler state in a distributed system.
+This example is "blog"-sized, and leaves out the usual things you'd want in a bulletproof system. You'll need ZooKeeper to run
+the Mesos cluster itself for a real setup, so you might as well use it. Incidentally, there are bindings using the C ZooKeeper library [here on Hackage](http://hackage.haskell.org/package/hzk-2.1.0/docs/Database-Zookeeper.html).
 
 Setting things up:
 
 ``` bash
 cabal update
 cabal sandbox init
-cabal install hs-mesos
+cabal install hs-mesos pipes-mesos
 ```
 
 #### Scheduler.hs
@@ -37,10 +54,15 @@ main = withSchedulerDriver about "127.0.0.1:5050" Nothing go
 data BeehiveState = BeehiveState
   { beeCount :: TVar Int
   }
-instance ToScheduler 
 
+instance ToScheduler BeehiveState where
 ```
 
-**Disclaimer:** You'd probably want to use something like ZooKeeper to actually manage scheduler state in a distributed system.
-This example is "blog"-sized, and leaves out the usual things you'd want in a bulletproof system.
+## Now with Pipes!
+
+``` haskell
+module Main where
+import Pipes.Mesos.Scheduler
+
+```
 

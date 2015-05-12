@@ -22,4 +22,4 @@ deployment:
       - cabal exec runghc site.hs deploy
       - git config --global user.email "ian@iankduncan.com"
       - git config --global user.name "Ian Duncan"
-      - cd iand675.github.io && git commit -am "Automated deploy" ; git push
+      - cd iand675.github.io && git add . && git commit -am "Automated deploy" ; git push

@@ -20,4 +20,6 @@ deployment:
     commands:
       - git clone git@github.com:iand675/iand675.github.io.git
       - cabal exec runghc site.hs deploy
+      - git config --global user.email "ian@iankduncan.com"
+      - git config --global user.name "Ian Duncan"
       - cd iand675.github.io && git commit -am "Automated deploy" && git push

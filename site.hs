@@ -57,6 +57,28 @@ main = hakyllWith (defaultConfiguration { deployCommand = "rm -rf iand675.github
       >>= loadAndApplyTemplate "templates/default.html" postCtx
       >>= relativizeUrls
 
+  match "notes/*" $ do
+    route $ setExtension "html"
+    compile $ pandocCompiler
+      >>= loadAndApplyTemplate "templates/post.html"    postCtx
+      >>= saveSnapshot "content"
+      >>= loadAndApplyTemplate "templates/default.html" postCtx
+      >>= relativizeUrls
+
+  create ["notes.html"] $ do
+    route idRoute
+    compile $ do
+      posts <- recentFirst =<< loadAll "notes/*"
+      let notesCtx =
+            listField "posts" postCtx (return posts) `mappend`
+            constField "title" "Notes"               `mappend`
+            defaultContext
+      
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/notes.html" notesCtx
+        >>= loadAndApplyTemplate "templates/default.html" notesCtx
+        >>= relativizeUrls
+
   create ["archive.html"] $ do
     route idRoute
     compile $ do
